@@ -3,6 +3,7 @@ const topic = 'akadigital';
 const subscription = 'demo';
 
 async function run() {
+	/*
     const auth = new pulsar.AuthenticationTls({
         certificatePath: '/etc/letsencrypt/live/dev.akadigital.net/cert.pem',
         privateKeyPath: '/etc/letsencrypt/live/dev.akadigital.net/privkey.pem',
@@ -12,6 +13,10 @@ async function run() {
         serviceUrl: 'pulsar+ssl://dev.akadigital.net:1337/',
         authentication: auth,
         tlsTrustCertsFilePath: '/etc/letsencrypt/live/dev.akadigital.net/fullchain.pem',
+    });
+	*/
+    const client = new pulsar.Client({
+        serviceUrl: 'pulsar://localhost:1337'
     });
 
     const producer = await client.createProducer({
