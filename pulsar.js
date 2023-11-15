@@ -13,6 +13,7 @@ const client = new pulsar.Client({
             privateKeyPath: privateKeyPathLetsencrypt,
         },
     },
+    logLevel: 'VERBOSE',
 });
 
 async function run() {
