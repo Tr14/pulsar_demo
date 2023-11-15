@@ -3,7 +3,7 @@ const topic = 'akadigital';
 const subscription = 'demo';
 const certificatePath = '/etc/letsencrypt/live/dev.akadigital.net/cert.pem';
 const privateKeyPath = '/etc/letsencrypt/live/dev.akadigital.net/privkey.pem';
-const serviceUrl = 'pulsar+ssl://dev.akadigital.net:6651;
+const serviceUrl = 'pulsar+ssl://dev.akadigital.net:6651';
 
 const client = new pulsar.Client({
     serviceUrl,
