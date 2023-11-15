@@ -1,4 +1,5 @@
 const pulsar = require('pulsar-client');
+const serviceUrl = 'pulsar://localhost:6650';
 const topic = 'akadigital';
 const subscription = 'demo';
 
@@ -16,7 +17,7 @@ async function run() {
     });
 	*/
     const client = new pulsar.Client({
-        serviceUrl: 'pulsar://localhost:1337'
+        serviceUrl,
     });
 
     const producer = await client.createProducer({
