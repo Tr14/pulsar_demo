@@ -3,12 +3,12 @@ const topic = 'akadigital';
 const subscription = 'demo';
 
 async function run() {
-    const auth = new Pulsar.AuthenticationTls({
+    const auth = new pulsar.AuthenticationTls({
         certificatePath: '/etc/letsencrypt/live/dev.akadigital.net/cert.pem',
         privateKeyPath: '/etc/letsencrypt/live/dev.akadigital.net/privkey.pem',
     });
 
-    const client = new Pulsar.Client({
+    const client = new pulsar.Client({
         serviceUrl: 'pulsar+ssl://dev.akadigital.net:1337/',
         authentication: auth,
         tlsTrustCertsFilePath: '/etc/letsencrypt/live/dev.akadigital.net/fullchain.pem',
