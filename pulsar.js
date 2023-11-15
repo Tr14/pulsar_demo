@@ -1,24 +1,19 @@
 const pulsar = require('pulsar-client');
-const serviceUrl = 'pulsar://localhost:6650';
 const topic = 'akadigital';
 const subscription = 'demo';
 
 async function run() {
-	/*
     const auth = new pulsar.AuthenticationTls({
         certificatePath: '/etc/letsencrypt/live/dev.akadigital.net/cert.pem',
         privateKeyPath: '/etc/letsencrypt/live/dev.akadigital.net/privkey.pem',
     });
 
     const client = new pulsar.Client({
-        serviceUrl: 'pulsar+ssl://dev.akadigital.net:1337/',
+        serviceUrl: 'pulsar+ssl://dev.akadigital.net:6651',
         authentication: auth,
         tlsTrustCertsFilePath: '/etc/letsencrypt/live/dev.akadigital.net/fullchain.pem',
     });
-	*/
-    const client = new pulsar.Client({
-        serviceUrl,
-    });
+
 
     const producer = await client.createProducer({
         topic,
