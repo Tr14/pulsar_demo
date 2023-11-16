@@ -3,21 +3,23 @@ const topic = 'akadigital';
 const subscription = 'demo';
 const certificatePathLetsencrypt = '/etc/letsencrypt/live/dev.akadigital.net/cert.pem';
 const privateKeyPathLetsencrypt = '/etc/letsencrypt/live/dev.akadigital.net/privkey.pem';
-const serviceUrl = 'pulsar+ssl://dev.akadigital.net:6651';
+const serviceUrl = 'pulsar://localhost:6650';
 
 const client = new pulsar.Client({
     serviceUrl,
+    /*
     authentication: {
         tls: {
             certificatePath: certificatePathLetsencrypt,
             privateKeyPath: privateKeyPathLetsencrypt,
         },
     },
+    */
     logLevel: 'VERBOSE',
 });
 
 async function run() {
-    
+
     const producer = await client.createProducer({
         topic,
     });
