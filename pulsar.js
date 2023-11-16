@@ -23,7 +23,6 @@ async function run() {
     const consumer = await client.subscribe({
         topic: 'persistent://public/default/my-topic',
         subscription: 'sub1',
-        subscriptionType: pulsar.SubscriptionType.Exclusive,
     });
 
     producer.send({
