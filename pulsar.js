@@ -1,43 +1,38 @@
 const pulsar = require('pulsar-client');
-const topic = 'akadigital';
-const subscription = 'demo';
 const certificatePathLetsencrypt = '/etc/letsencrypt/live/dev.akadigital.net/cert.pem';
 const privateKeyPathLetsencrypt = '/etc/letsencrypt/live/dev.akadigital.net/privkey.pem';
-const serviceUrl = 'pulsar://localhost:6650';
-
-const client = new pulsar.Client({
-    serviceUrl,
-    /*
-    authentication: {
-        tls: {
-            certificatePath: certificatePathLetsencrypt,
-            privateKeyPath: privateKeyPathLetsencrypt,
-        },
-    },
-    */
-    logLevel: 'VERBOSE',
-});
 
 async function run() {
-
-    const producer = await client.createProducer({
-        topic,
+    const client = new pulsar.Client({
+        serviceUrl: 'pulsar://localhost:6650',
+        /*
+        authentication: {
+            tls: {
+                certificatePath: certificatePathLetsencrypt,
+                privateKeyPath: privateKeyPathLetsencrypt,
+            },
+        },
+        */
+        logLevel: 'VERBOSE',
     });
 
-    await producer.send({
-        data: 'Hello, Pulsar!',
+    const producer = await client.createProducer({
+        topic: 'persistent://public/default/akadigital',
     });
 
     const consumer = await client.subscribe({
-        topic,
-        subscriptionName: subscription,
+        topic: 'persistent://public/default/my-topic',
+        subscription: 'sub1',
         subscriptionType: pulsar.SubscriptionType.Exclusive,
+    });
+
+    producer.send({
+        data: Buffer.from("hello")
     });
 
     const message = await consumer.receive();
     console.log(`Received message: ${message.getData().toString()}`);
-
-    await consumer.acknowledge(message);
+    consumer.acknowledge(message);
 
     await producer.close();
     await consumer.close();
