@@ -3,27 +3,31 @@ const Pulsar = require('pulsar-client');
 (async () => {
     // Create a client
     const client = new Pulsar.Client({
-        serviceUrl: 'pulsar://localhost:6650',
-        operationTimeoutSeconds: 30,
+        serviceUrl: 'pulsar://localhost:6650'
     });
 
     // Create a producer
     const producer = await client.createProducer({
         topic: 'persistent://public/default/my-topic',
-        sendTimeoutMs: 30000,
-        batchingEnabled: true,
     });
 
-    // Send messages
-    for (let i = 0; i < 10; i += 1) {
-        const msg = `my-message-${i}`;
-        producer.send({
-            data: Buffer.from(msg),
-        });
-        console.log(`Sent message: ${msg}`);
-    }
-    await producer.flush();
+    // Create a consumer
+    const consumer = await client.subscribe({
+        topic: 'persistent://public/default/my-topic',
+        subscription: 'sub1'
+    });
+
+    // Send a message
+    producer.send({
+        data: Buffer.from("hello")
+    });
+
+    // Receive the message
+    const msg = await consumer.receive();
+    console.log(msg.getData().toString());
+    consumer.acknowledge(msg);
 
     await producer.close();
+    await consumer.close();
     await client.close();
 })();
