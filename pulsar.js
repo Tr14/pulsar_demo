@@ -3,24 +3,24 @@ const pulsar = require('pulsar-client');
 async function main() {
     try {
         const client = new pulsar.Client({
-            serviceUrl: 'pulsar+ssl://localhost:6651',
-            authentication: {
-                use: 'tls',
-                trustedCertificates: ['/home/trucnguyen/apache-pulsar-3.1.1/cert/ca-cert.pem'],
-                certificatePath: '/home/trucnguyen/apache-pulsar-3.1.1/cert/pulsar-server-cert.pem',
-                privateKeyPath: '/home/trucnguyen/apache-pulsar-3.1.1/cert/pulsar-server.pem',
-            },
+            serviceUrl: 'pulsar://168.138.203.213:6650',
+            operationTimeoutSeconds: 30,
         });
 
         const producer = await client.createProducer({
-            topic: 'my-topic',
+            topic: 'persistent://public/default/my-topic',
+            sendTimeoutMs: 30000,
+            batchingEnabled: true,
         });
 
-        const message = {
-            data: 'Hello, Pulsar!',
-        };
-
-        await producer.send(message);
+        for (let i = 0; i < 10; i += 1) {
+            const msg = `my-message-${i}`;
+            producer.send({
+                data: Buffer.from(msg),
+            });
+            console.log(`Sent message: ${msg}`);
+        }
+        await producer.flush();
 
         await producer.close();
         await client.close();
