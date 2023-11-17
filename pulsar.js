@@ -1,33 +1,26 @@
 const Pulsar = require('pulsar-client');
 
 (async () => {
-    // Create a client
     const client = new Pulsar.Client({
-        serviceUrl: 'pulsar+ssl://localhost:6651'
+        serviceUrl: 'pulsar+ssl://localhost:6651',
+        authentication: {
+            use: 'tls',
+            trustedCertificates: ['/home/trucnguyen/apache-pulsar-3.1.1/cert/ca-cert.pem'],
+            certificatePath: '/home/trucnguyen/apache-pulsar-3.1.1/cert/pulsar-admin-cert.pem',
+            privateKeyPath: '/home/trucnguyen/apache-pulsar-3.1.1/cert/pulsar-admin.pem',
+        },
     });
 
-    // Create a producer
     const producer = await client.createProducer({
-        topic: 'persistent://public/default/my-topic',
+        topic: 'my-topic',
     });
 
-    // Create a consumer
-    const consumer = await client.subscribe({
-        topic: 'persistent://public/default/my-topic',
-        subscription: 'sub1'
-    });
+    const message = {
+        data: 'Hello, Pulsar!',
+    };
 
-    // Send a message
-    producer.send({
-        data: Buffer.from("hello")
-    });
-
-    // Receive the message
-    const msg = await consumer.receive();
-    console.log(msg.getData().toString());
-    consumer.acknowledge(msg);
+    await producer.send(message);
 
     await producer.close();
-    await consumer.close();
     await client.close();
 })();
