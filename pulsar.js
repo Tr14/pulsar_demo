@@ -3,7 +3,7 @@ const Pulsar = require('pulsar-client');
 (async () => {
     // Create a client
     const client = new Pulsar.Client({
-        serviceUrl: 'pulsar://localhost:6650'
+        serviceUrl: 'pulsar+ssl://localhost:6651'
     });
 
     // Create a producer
