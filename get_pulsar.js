@@ -22,9 +22,9 @@ async function consumeMessages() {
 
     try {
         const res = await pool.query(
-            "INSERT INTO pulsardata (message) VALUES ($1)", [message]
+            "INSERT INTO pulsardata (message, info) VALUES ($1, $2)", ["truc test json", message]
         );
-        console.log(`Pass ${message} from pulsar to postgres`);
+        console.log(`Pass ${message.getData().toString()} from pulsar to postgres`);
     } catch (error) {
         console.error(error)
     }
