@@ -14,13 +14,12 @@ async function main() {
             batchingEnabled: true,
         });
 
-        for (let i = 0; i < 3; i += 1) {
-            const msg = `Test-${i}`;
-            producer.send({
-                data: Buffer.from(msg),
-            });
-            console.log(`Sent message: ${msg}`);
-        }
+        const message = '{ "customer": "John Doe", "items": {"product": "Beer","qty": 6}}';
+        producer.send({
+            data: Buffer.from(message),
+        });
+        console.log(`Sent message: ${message}`);
+
         await producer.flush();
 
         await producer.close();

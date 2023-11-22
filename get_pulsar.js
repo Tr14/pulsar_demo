@@ -1,4 +1,5 @@
 const pulsar = require('pulsar-client');
+const { pool } = require("./db");
 
 async function consumeMessages() {
     const client = new pulsar.Client({
@@ -16,12 +17,19 @@ async function consumeMessages() {
 
     console.log(`Consumer connected to topic: my-topic`);
 
-    for (let i = 0; i < 10; i++) {
-        const message = await consumer.receive();
-        console.log(`Received message: ${message.getData().toString()}`);
+    const message = await consumer.receive();
+    console.log(`Received message: ${message.getData().toString()}`);
 
-        consumer.acknowledge(message);
+    try {
+        const res = await pool.query(
+            "INSERT INTO pulsardata (message) VALUES ($1)", [message]
+        );
+        console.log(`Pass ${message} from pulsar to postgres`);
+    } catch (error) {
+        console.error(error)
     }
+
+    consumer.acknowledge(message);
 
     await consumer.close();
     await client.close();
