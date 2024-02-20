@@ -14,7 +14,7 @@ async function main() {
             batchingEnabled: true,
         });
 
-        const message = '{ "customer": "John Doe", "items": {"product": "Beer","qty": 6}}';
+        const message = '{ "customer": "Truc Nguyen", "items": {"product": "Lmaoez","qty": 1}}';
         producer.send({
             data: Buffer.from(message),
         });
